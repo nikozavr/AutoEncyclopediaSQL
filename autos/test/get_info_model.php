@@ -4,7 +4,7 @@
   
   $result = array();
   
-  if(empty($_POST))
+  if(empty($_GET))
   {
     $result["success"] = -1;
   } else
@@ -12,13 +12,11 @@
     $query = " 
                 SELECT prod_date,
                        out_date,
-                       country,
-                       info,
-                       web
+                       info
                 FROM 
-                      marqs
+                      models
                 WHERE 
-                      name = ?
+                      id_model = ?
         "; 
 
         $db = new mysqli($host, $username, $password, $dbname);
@@ -29,19 +27,17 @@
 	}
 
 	$stmt = $db->stmt_init();
-;
+
 	if ($stmt->prepare($query)) {
 
-	    $stmt->bind_param("s", $_POST['name']);
+	    $stmt->bind_param("i", $_GET['id_model']);
 
             $stmt->execute();
 
             $res = $stmt->get_result();
-            
-            //$stmt->bind_result($prod, $out, $country, $info, $web);
 
 	    $row = $res->fetch_assoc();
-;
+
 	    $stmt->close();
 	    
 	    
@@ -49,7 +45,7 @@
 		$result['success'] = 1;
 		
 		$row['info'] = iconv("CP1251","UTF-8",$row['info']);
-		$result['marq_info'] = $row;
+		$result['model_info'] = $row;
 	    } else {
 		$result['success'] = 0;
 	    }
@@ -57,6 +53,6 @@
 	 
 	 $db->close();
     }
-  echo json_encode($result);
+    echo json_encode($result);
 
 ?>

@@ -15,7 +15,7 @@
                 INNER JOIN autos ON autos.id_model = models.id_model
                 INNER JOIN pic_auto ON pic_auto.id_auto = autos.id_auto
                 WHERE autos.id_marq = ?
-                AND pic_auto.priority <= 0
+                AND pic_auto.priority =0
                 GROUP BY models.name
         "; 
    	

@@ -3,7 +3,7 @@
   
   $result = array();
   
-  if(empty($_POST))
+  if(empty($_GET))
   {
     $result["success"] = -1;
   } else
@@ -18,7 +18,7 @@
                 GROUP BY geners.number
         "; 
    	
-        $db = new mysqli($host, $username, $password, $dbname);
+    $db = new mysqli($host, $username, $password, $dbname);
 
   	if (mysqli_connect_errno()) {
   	    printf("Can't connect: %s\n", mysqli_connect_error());
@@ -29,15 +29,21 @@
 
   	if ($stmt->prepare($query)) {
 
-	    $stmt->bind_param("i", $_POST['id_model']);
+	    $stmt->bind_param("i", $_GET['id_model']);
 
       $stmt->execute();
 
       $res = $stmt->get_result();
 
-  		$stmt->close();
-        if(count($res) > 0)
-      {
+      
+      
+      $stmt->close;
+
+      //$row = $res->fetch_all(MYSQLI_BOTH);
+    //  $row = $res->fetch_assoc();
+  		
+  		if(count($res) > 0)
+  		{
           $result["success"] = 1;
           $result["count"] = count($res);
           $result["geners"] = array();
@@ -50,9 +56,23 @@
           }
 
           $result["count"] = $count;
-      } else {
-          $result["success"] = 0;
-      }
+
+       //   for($i = 0; $i < count($res); $i++){
+         //     $row = $res->fetch_assoc();
+           //   $row['name'] = iconv("CP1251","UTF-8",$row['name']);
+             // array_push($result["geners"],$row);
+          //} 
+       // printf("%d", count($res));
+         // $result["success"] = 1;
+  		    //$result["count"] = count($res);
+          
+
+  		   // $result["geners"] = $row;
+  		} else {
+  		    $result["success"] = 0;
+  		}
+
+      
     }
     $db->close();
   }
